@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="portfolioApp">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Professional portfolio — Home, About, Projects, and Contact.">
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="js/app.js"></script>
+</head>
+<body ng-controller="MainCtrl" ng-cloak>
+  <header class="header">
+    <div class="header__inner">
+      <a class="logo" href="#home" ng-click="scrollTo('home', $event)">{{ title }}</a>
+      <button
+        type="button"
+        class="nav-toggle"
+        ng-click="toggleNav()"
+        ng-attr-aria-expanded="{{ navOpen }}"
+        aria-controls="site-nav"
+      >
+        Menu
+      </button>
+      <nav id="site-nav" class="nav" ng-class="{'nav--open': navOpen}">
+        <a class="nav__link" href="#home" ng-click="scrollTo('home', $event)">Home</a>
+        <a class="nav__link" href="#about" ng-click="scrollTo('about', $event)">About</a>
+        <a class="nav__link" href="#projects" ng-click="scrollTo('projects', $event)">Projects</a>
+        <a class="nav__link" href="#contact" ng-click="scrollTo('contact', $event)">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="section section--hero" aria-labelledby="home-heading">
+      <div class="section__inner">
+        <p class="eyebrow">Full-stack developer</p>
+        <h1 id="home-heading" class="headline">Building calm, reliable web products.</h1>
+        <p class="lede">
+          I design and ship clear interfaces with HTML, CSS, and AngularJS, backed by Django services that are easy to run and reason about.
+        </p>
+        <div class="hero__actions">
+          <button type="button" class="btn btn--primary" ng-click="scrollTo('projects', $event)">View work</button>
+          <button type="button" class="btn btn--ghost" ng-click="scrollTo('contact', $event)">Get in touch</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section" aria-labelledby="about-heading">
+      <div class="section__inner section__inner--about">
+        <figure class="about__photo" aria-hidden="false">
+          <img
+            class="about__photo-img"
+            src="images/my_photo.jpg"
+            alt="Profile photo"
+            width="140"
+            height="140"
+            loading="lazy"
+          />
+        </figure>
+        <div class="about__content">
+          <h2 id="about-heading" class="section__title">About</h2>
+          <p class="prose">
+            I am a developer who cares about clarity: readable markup, thoughtful UX, and systems that stay maintainable as they grow.
+            This site is a single page with anchor navigation, using AngularJS for light interactivity and a small Django API for the contact form.
+          </p>
+          <ul class="pill-list" aria-label="Focus areas">
+            <li>AngularJS &amp; JavaScript</li>
+            <li>Django &amp; REST APIs</li>
+            <li>Performance &amp; accessibility</li>
+          </ul>
+          <div class="about__resume">
+            <a
+              class="btn btn--resume"
+              ng-href="{{ resumeUrl }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download my resume
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section section--muted" aria-labelledby="projects-heading">
+      <div class="section__inner">
+        <h2 id="projects-heading" class="section__title">Projects</h2>
+        <p class="section__intro">Selected work—replace titles and copy with your own shipped projects.</p>
+        <div class="cards">
+          <article class="card" ng-repeat="p in projects track by p.name">
+            <h3 class="card__title">{{ p.name }}</h3>
+            <p class="card__stack">{{ p.stack }}</p>
+            <p class="card__blurb">{{ p.blurb }}</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="section__inner section__inner--narrow">
+        <h2 id="contact-heading" class="section__title">Contact</h2>
+        <p class="section__intro">Send a note—this form posts to the Django <code>/api/contact/</code> endpoint.</p>
+
+        <form class="form" ng-submit="submitContact()" novalidate>
+          <label class="field">
+            <span class="field__label">Name</span>
+            <input class="field__input" name="name" ng-model="contact.name" required autocomplete="name">
+          </label>
+          <label class="field">
+            <span class="field__label">Email</span>
+            <input class="field__input" type="email" name="email" ng-model="contact.email" required autocomplete="email">
+          </label>
+          <label class="field">
+            <span class="field__label">Message</span>
+            <textarea class="field__input field__input--area" name="message" rows="5" ng-model="contact.message" required></textarea>
+          </label>
+          <div class="form__footer">
+            <button type="submit" class="btn btn--primary" ng-disabled="contactStatus === 'sending'">
+              {{ contactStatus === 'sending' ? 'Sending…' : 'Send message' }}
+            </button>
+            <p class="form__hint form__hint--ok" role="status" ng-if="contactStatus === 'ok'">Thanks—your message was received.</p>
+            <p class="form__hint form__hint--err" role="alert" ng-if="contactStatus === 'error'">Something went wrong. Try again shortly.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <span>&copy; {{ title }}</span>
+      <a class="footer__link" href="#home" ng-click="scrollTo('home', $event)">Back to top</a>
+    </div>
+  </footer>
+</body>
+</html>

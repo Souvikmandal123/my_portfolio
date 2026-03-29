@@ -1,0 +1,114 @@
+<header class="header">
+  <div class="header__inner">
+    <a class="logo" href="#home" (click)="$event.preventDefault(); scrollTo('home')">{{ title }}</a>
+    <button
+      type="button"
+      class="nav-toggle"
+      [attr.aria-expanded]="navOpen"
+      aria-controls="site-nav"
+      (click)="navOpen = !navOpen"
+    >
+      Menu
+    </button>
+    <nav id="site-nav" class="nav" [class.nav--open]="navOpen">
+      <a class="nav__link" href="#home" (click)="$event.preventDefault(); scrollTo('home')">Home</a>
+      <a class="nav__link" href="#about" (click)="$event.preventDefault(); scrollTo('about')">About</a>
+      <a class="nav__link" href="#projects" (click)="$event.preventDefault(); scrollTo('projects')">Projects</a>
+      <a class="nav__link" href="#contact" (click)="$event.preventDefault(); scrollTo('contact')">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="home" class="section section--hero" aria-labelledby="home-heading">
+    <div class="section__inner">
+      <p class="eyebrow">Full-stack developer</p>
+      <h1 id="home-heading" class="headline">Building calm, reliable web products.</h1>
+      <p class="lede">
+        I design and ship interfaces with Angular and back them with Django services that are easy to run and reason about.
+      </p>
+      <div class="hero__actions">
+        <button type="button" class="btn btn--primary" (click)="scrollTo('projects')">View work</button>
+        <button type="button" class="btn btn--ghost" (click)="scrollTo('contact')">Get in touch</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section" aria-labelledby="about-heading">
+    <div class="section__inner section__inner--narrow">
+      <h2 id="about-heading" class="section__title">About</h2>
+      <p class="prose">
+        I am a developer who cares about clarity: readable code, thoughtful UX, and systems that stay maintainable as they grow.
+        This site is a single Angular page with anchor navigation, paired with a small Django API for the contact form.
+      </p>
+      <ul class="pill-list" aria-label="Focus areas">
+        <li>Angular &amp; TypeScript</li>
+        <li>Django &amp; REST APIs</li>
+        <li>Performance &amp; accessibility</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="projects" class="section section--muted" aria-labelledby="projects-heading">
+    <div class="section__inner">
+      <h2 id="projects-heading" class="section__title">Projects</h2>
+      <p class="section__intro">Selected work—replace titles and copy with your own shipped projects.</p>
+      <div class="cards">
+        @for (p of projects; track p.name) {
+          <article class="card">
+            <h3 class="card__title">{{ p.name }}</h3>
+            <p class="card__stack">{{ p.stack }}</p>
+            <p class="card__blurb">{{ p.blurb }}</p>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section" aria-labelledby="contact-heading">
+    <div class="section__inner section__inner--narrow">
+      <h2 id="contact-heading" class="section__title">Contact</h2>
+      <p class="section__intro">Send a note—this form posts to the Django <code>/api/contact/</code> endpoint.</p>
+
+      <form class="form" (ngSubmit)="submitContact()">
+        <label class="field">
+          <span class="field__label">Name</span>
+          <input class="field__input" name="name" [(ngModel)]="contact.name" required autocomplete="name" />
+        </label>
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input
+            class="field__input"
+            type="email"
+            name="email"
+            [(ngModel)]="contact.email"
+            required
+            autocomplete="email"
+          />
+        </label>
+        <label class="field">
+          <span class="field__label">Message</span>
+          <textarea class="field__input field__input--area" name="message" rows="5" [(ngModel)]="contact.message" required></textarea>
+        </label>
+        <div class="form__footer">
+          <button type="submit" class="btn btn--primary" [disabled]="contactStatus === 'sending'">
+            {{ contactStatus === 'sending' ? 'Sending…' : 'Send message' }}
+          </button>
+          @if (contactStatus === 'ok') {
+            <p class="form__hint form__hint--ok" role="status">Thanks—your message was received.</p>
+          }
+          @if (contactStatus === 'error') {
+            <p class="form__hint form__hint--err" role="alert">Something went wrong. Try again shortly.</p>
+          }
+      </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <span>&copy; {{ title }}</span>
+    <a class="footer__link" href="#home" (click)="$event.preventDefault(); scrollTo('home')">Back to top</a>
+  </div>
+</footer>
